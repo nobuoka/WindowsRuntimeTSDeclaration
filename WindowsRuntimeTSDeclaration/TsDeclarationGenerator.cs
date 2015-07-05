@@ -106,6 +106,11 @@ namespace WindowsRuntimeTSDeclaration
                 var i = syntax as IdentifierNameSyntax;
                 return i.Identifier.ToString().StartsWith("I");
             }
+            else if (syntax is QualifiedNameSyntax)
+            {
+                var q = syntax as QualifiedNameSyntax;
+                return checkTypeIsInterface(q.Right);
+            }
             else
             {
                 throw new Exception("Unknown type : " + syntax.GetType());
