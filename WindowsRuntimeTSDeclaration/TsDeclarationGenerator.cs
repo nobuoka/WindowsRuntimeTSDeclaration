@@ -301,6 +301,21 @@ namespace WindowsRuntimeTSDeclaration
                 writer.Write(".");
                 writeType(q.Right);
             }
+            else if (syntax is ArrayTypeSyntax)
+            {
+                var a = syntax as ArrayTypeSyntax;
+                writeType(a.ElementType);
+                if (a.RankSpecifiers.Count != 1)
+                {
+                    throw new Exception("More than one rank specifiers not supported");
+                }
+                var r = a.RankSpecifiers[0];
+                if (r.Rank != 1)
+                {
+                    throw new Exception("Rank 2 or more not supported");
+                }
+                writer.Write("[]");
+            }
             else
             {
                 throw new Exception("Unknown type : " + syntax.GetType());

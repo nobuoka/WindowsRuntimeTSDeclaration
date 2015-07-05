@@ -102,6 +102,9 @@ namespace WindowsRuntimeTSDeclaration.Test
 
             generated = generateDeclaration("class Test { Qualified.Test2<Test3> Name { get; } }");
             Assert.AreEqual("class Test {\n    name: Qualified.Test2<Test3>;\n}\n", generated);
+
+            generated = generateDeclaration("class Test { Qualified.Test2<Test3>[] Name { get; } }");
+            Assert.AreEqual("class Test {\n    name: Qualified.Test2<Test3>[];\n}\n", generated);
         }
 
         [TestMethod]
