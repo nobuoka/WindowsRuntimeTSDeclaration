@@ -21,6 +21,26 @@ namespace WindowsRuntimeTSDeclaration.Test
             Assert.AreEqual("module HelloWorld.Qualified.Name {\n}\n", generated);
         }
 
+        [TestMethod]
+        public void generateOnlyEmptyClassDeclaration()
+        {
+            var generated = generateDeclaration("class HelloWorld {}");
+            Assert.AreEqual("class HelloWorld {\n}\n", generated);
+        }
+
+        [TestMethod]
+        public void generateClassDeclarationWithInheritance()
+        {
+            var generated = generateDeclaration("class HelloWorld : ParentWorld {}");
+            Assert.AreEqual("class HelloWorld extends ParentWorld {\n}\n", generated);
+
+            generated = generateDeclaration("class HelloWorld : ParentWorld, IParentInterface {}");
+            Assert.AreEqual("class HelloWorld extends ParentWorld implements IParentInterface {\n}\n", generated);
+
+            generated = generateDeclaration("class HelloWorld : IParent1, IParent2, IParent3 {}");
+            Assert.AreEqual("class HelloWorld implements IParent1, IParent2, IParent3 {\n}\n", generated);
+        }
+
         private string generateDeclaration(string csStr)
         {
             var writer = new StringWriter();
