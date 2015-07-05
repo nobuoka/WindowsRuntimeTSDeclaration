@@ -46,6 +46,10 @@ namespace WindowsRuntimeTSDeclaration
         private void procNamespaceDeclarationSyntax(NamespaceDeclarationSyntax syntax)
         {
             writer.Write("module " + syntax.Name + " {\n");
+            foreach (var memberDecl in syntax.Members)
+            {
+                procMemberDeclarationSyntax(memberDecl, writer, 0);
+            }
             writer.Write("}\n");
         }
 

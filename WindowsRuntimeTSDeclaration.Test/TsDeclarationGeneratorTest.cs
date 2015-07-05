@@ -22,6 +22,13 @@ namespace WindowsRuntimeTSDeclaration.Test
         }
 
         [TestMethod]
+        public void generateNamespaceDeclarationWithMembers()
+        {
+            var generated = generateDeclaration("namespace HelloWorld.Qualified.Name { class Test {} }");
+            Assert.AreEqual("module HelloWorld.Qualified.Name {\nclass Test {\n}\n}\n", generated);
+        }
+
+        [TestMethod]
         public void generateOnlyEmptyClassDeclaration()
         {
             var generated = generateDeclaration("class HelloWorld {}");
