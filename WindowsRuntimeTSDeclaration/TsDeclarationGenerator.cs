@@ -41,6 +41,10 @@ namespace WindowsRuntimeTSDeclaration
             {
                 procConstructorDeclarationSyntax(syntax as ConstructorDeclarationSyntax, indentCount);
             }
+            else if (syntax is MethodDeclarationSyntax)
+            {
+                procMethodDeclarationSyntax(syntax as MethodDeclarationSyntax, indentCount);
+            }
             else if (syntax is PropertyDeclarationSyntax)
             {
                 procPropertyDeclarationSyntax(syntax as PropertyDeclarationSyntax, indentCount);
@@ -121,6 +125,17 @@ namespace WindowsRuntimeTSDeclaration
             writer.Write(");\n");
         }
 
+        private void procMethodDeclarationSyntax(MethodDeclarationSyntax syntax, int indentCount)
+        {
+            writeIndents(indentCount);
+            writer.Write(syntax.Identifier + "(");
+            if (syntax.ParameterList != null)
+                procParameterList(syntax.ParameterList);
+            writer.Write("): ");
+            writeType(syntax.ReturnType);
+            writer.Write(";\n");
+        }
+
         private void procPropertyDeclarationSyntax(PropertyDeclarationSyntax syntax, int indentCount)
         {
             writeIndents(indentCount);
@@ -138,6 +153,16 @@ namespace WindowsRuntimeTSDeclaration
                     isFirst = false;
                 else
                     writer.Write(", ");
+                // TODO: handle out modifier
+                if (parameter.Modifiers.Count > 0)
+                {
+                    writer.Write("/*");
+                    foreach (var mod in parameter.Modifiers)
+                    {
+                        writer.Write("[" + mod + "]");
+                    }
+                    writer.Write("*/ ");
+                }
                 writer.Write(parameter.Identifier + ": ");
                 writeType(parameter.Type);
             }

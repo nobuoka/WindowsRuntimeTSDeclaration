@@ -39,6 +39,7 @@ namespace WindowsRuntimeTSDeclaration
             Instance.Add("ushort", new JavaScriptTypeNameAndUniqunessPair("number", false));
             Instance.Add("uint", new JavaScriptTypeNameAndUniqunessPair("number", false));
             Instance.Add("ulong", new JavaScriptTypeNameAndUniqunessPair("number", false));
+            Instance.Add("void", new JavaScriptTypeNameAndUniqunessPair("void", true));
             return Instance;
         }
     }
