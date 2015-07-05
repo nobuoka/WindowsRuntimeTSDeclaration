@@ -34,6 +34,7 @@ namespace WindowsRuntimeTSDeclaration
             Instance.Add("short", new JavaScriptTypeNameAndUniqunessPair("number", false));
             Instance.Add("int", new JavaScriptTypeNameAndUniqunessPair("number", false));
             Instance.Add("long", new JavaScriptTypeNameAndUniqunessPair("number", false));
+            Instance.Add("object", new JavaScriptTypeNameAndUniqunessPair("Object", true));
             Instance.Add("float", new JavaScriptTypeNameAndUniqunessPair("number", false));
             Instance.Add("string", new JavaScriptTypeNameAndUniqunessPair("string", true));
             Instance.Add("ushort", new JavaScriptTypeNameAndUniqunessPair("number", false));
