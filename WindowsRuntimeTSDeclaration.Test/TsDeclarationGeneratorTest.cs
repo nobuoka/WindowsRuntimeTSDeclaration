@@ -61,6 +61,16 @@ namespace WindowsRuntimeTSDeclaration.Test
             Assert.AreEqual("class Test {\n    name: Test2;\n}\n", generated);
         }
 
+        [TestMethod]
+        public void convertCSharpPredefinedTypeToJavaScriptType()
+        {
+            var generated = generateDeclaration("class Test { uint name { get; }; }");
+            Assert.AreEqual("class Test {\n    name: number /* uint */;\n}\n", generated);
+
+            generated = generateDeclaration("class Test { bool isOk { get; }; }");
+            Assert.AreEqual("class Test {\n    isOk: boolean;\n}\n", generated);
+        }
+
         private string generateDeclaration(string csStr)
         {
             var writer = new StringWriter();

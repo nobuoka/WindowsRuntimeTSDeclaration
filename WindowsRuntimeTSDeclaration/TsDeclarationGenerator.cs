@@ -112,7 +112,22 @@ namespace WindowsRuntimeTSDeclaration
 
         private void writeType(TypeSyntax syntax)
         {
-            if (syntax is IdentifierNameSyntax)
+            if (syntax is PredefinedTypeSyntax)
+            {
+                PredefinedTypeSyntax p = syntax as PredefinedTypeSyntax;
+                JavaScriptTypeNameAndUniqunessPair jsType;
+                if (PredefinedTypeToJavaScriptTypeConvertingMap.getInstance().TryGetValue(p.Keyword.ToString(), out jsType))
+                {
+                    writer.Write(jsType.Name);
+                    if (!jsType.Uniquness)
+                        writer.Write(" /* " + p.Keyword + " */");
+                }
+                else
+                {
+                    throw new Exception("Unknown predefined type : " + p.Keyword);
+                }
+            }
+            else if (syntax is IdentifierNameSyntax)
             {
                 IdentifierNameSyntax i = (IdentifierNameSyntax)syntax;
                 writer.Write(i.Identifier);
