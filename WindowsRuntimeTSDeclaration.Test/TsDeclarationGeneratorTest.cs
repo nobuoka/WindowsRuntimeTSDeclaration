@@ -36,6 +36,13 @@ namespace WindowsRuntimeTSDeclaration.Test
         }
 
         [TestMethod]
+        public void GenerateStructDeclaration()
+        {
+            var generated = generateDeclaration("struct TestStruct { string Name; }");
+            Assert.AreEqual("interface TestStruct {\n    name: string;\n}\n", generated);
+        }
+
+        [TestMethod]
         public void generateOnlyEmptyClassDeclaration()
         {
             var generated = generateDeclaration("class HelloWorld {}");

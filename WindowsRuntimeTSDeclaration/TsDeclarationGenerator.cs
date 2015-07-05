@@ -41,6 +41,10 @@ namespace WindowsRuntimeTSDeclaration
             {
                 ProcEnumMemberDeclarationSyntax(syntax as EnumMemberDeclarationSyntax, indentCount);
             }
+            else if (syntax is StructDeclarationSyntax)
+            {
+                ProcStructDeclarationSyntax(syntax as StructDeclarationSyntax, indentCount);
+            }
             else if (syntax is ClassDeclarationSyntax)
             {
                 procClassDeclarationSyntax((ClassDeclarationSyntax)syntax, indentCount);
@@ -56,6 +60,10 @@ namespace WindowsRuntimeTSDeclaration
             else if (syntax is PropertyDeclarationSyntax)
             {
                 procPropertyDeclarationSyntax(syntax as PropertyDeclarationSyntax, indentCount);
+            }
+            else if (syntax is FieldDeclarationSyntax)
+            {
+                ProcFieldDeclarationSyntax(syntax as FieldDeclarationSyntax, indentCount);
             }
             else
             {
@@ -106,6 +114,27 @@ namespace WindowsRuntimeTSDeclaration
         {
             writeIndents(indentCount);
             writeMethodAndPropertyIdentifier(syntax.Identifier);
+        }
+
+        private void ProcStructDeclarationSyntax(StructDeclarationSyntax syntax, int indentCount)
+        {
+            writeIndents(indentCount);
+            writer.Write("interface ");
+            writer.Write(syntax.Identifier);
+            writer.Write(" {\n");
+
+            if (syntax.BaseList != null && syntax.BaseList.Types.Count > 0)
+            {
+                throw new Exception("Not supported");
+            }
+
+            foreach (var m in syntax.Members)
+            {
+                procMemberDeclarationSyntax(m, null, indentCount + 1);
+            }
+
+            writeIndents(indentCount);
+            writer.Write("}\n");
         }
 
         private void procClassDeclarationSyntax(ClassDeclarationSyntax syntax, int indentCount)
@@ -203,6 +232,20 @@ namespace WindowsRuntimeTSDeclaration
             writeMethodAndPropertyIdentifier(syntax.Identifier);
             writer.Write(": ");
             writeType(syntax.Type);
+            writer.Write(";\n");
+        }
+
+        private void ProcFieldDeclarationSyntax(FieldDeclarationSyntax syntax, int indentCount)
+        {
+            if (syntax.Declaration.Variables.Count > 1)
+            {
+                throw new Exception("Not supported");
+            }
+
+            writeIndents(indentCount);
+            writeMethodAndPropertyIdentifier(syntax.Declaration.Variables[0].Identifier);
+            writer.Write(": ");
+            writeType(syntax.Declaration.Type);
             writer.Write(";\n");
         }
 
