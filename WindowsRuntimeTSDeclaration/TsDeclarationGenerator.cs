@@ -37,6 +37,10 @@ namespace WindowsRuntimeTSDeclaration
             {
                 procClassDeclarationSyntax((ClassDeclarationSyntax)syntax, indentCount);
             }
+            else if (syntax is ConstructorDeclarationSyntax)
+            {
+                procConstructorDeclarationSyntax(syntax as ConstructorDeclarationSyntax, indentCount);
+            }
             else if (syntax is PropertyDeclarationSyntax)
             {
                 procPropertyDeclarationSyntax(syntax as PropertyDeclarationSyntax, indentCount);
@@ -108,12 +112,35 @@ namespace WindowsRuntimeTSDeclaration
             writer.Write("}\n");
         }
 
+        private void procConstructorDeclarationSyntax(ConstructorDeclarationSyntax syntax, int indentCount)
+        {
+            writeIndents(indentCount);
+            writer.Write("constructor(");
+            if (syntax.ParameterList != null)
+                procParameterList(syntax.ParameterList);
+            writer.Write(");\n");
+        }
+
         private void procPropertyDeclarationSyntax(PropertyDeclarationSyntax syntax, int indentCount)
         {
             writeIndents(indentCount);
             writer.Write(syntax.Identifier + ": ");
             writeType(syntax.Type);
             writer.Write(";\n");
+        }
+
+        private void procParameterList(ParameterListSyntax syntax)
+        {
+            bool isFirst = true;
+            foreach (var parameter in syntax.Parameters)
+            {
+                if (isFirst)
+                    isFirst = false;
+                else
+                    writer.Write(", ");
+                writer.Write(parameter.Identifier + ": ");
+                writeType(parameter.Type);
+            }
         }
 
         private void writeType(TypeSyntax syntax)

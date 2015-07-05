@@ -55,6 +55,16 @@ namespace WindowsRuntimeTSDeclaration.Test
         }
 
         [TestMethod]
+        public void generateConstructorDeclaration()
+        {
+            var generated = generateDeclaration("class Test { Test(); }");
+            Assert.AreEqual("class Test {\n    constructor();\n}\n", generated);
+
+            generated = generateDeclaration("class Test { Test(string name, Test2 test2); }");
+            Assert.AreEqual("class Test {\n    constructor(name: string, test2: Test2);\n}\n", generated);
+        }
+
+        [TestMethod]
         public void generatePropertyDeclaration()
         {
             var generated = generateDeclaration("class Test { string name { get; } }");
