@@ -128,7 +128,8 @@ namespace WindowsRuntimeTSDeclaration
         private void procMethodDeclarationSyntax(MethodDeclarationSyntax syntax, int indentCount)
         {
             writeIndents(indentCount);
-            writer.Write(syntax.Identifier + "(");
+            writeMethodAndPropertyIdentifier(syntax.Identifier);
+            writer.Write("(");
             if (syntax.ParameterList != null)
                 procParameterList(syntax.ParameterList);
             writer.Write("): ");
@@ -139,7 +140,8 @@ namespace WindowsRuntimeTSDeclaration
         private void procPropertyDeclarationSyntax(PropertyDeclarationSyntax syntax, int indentCount)
         {
             writeIndents(indentCount);
-            writer.Write(syntax.Identifier + ": ");
+            writeMethodAndPropertyIdentifier(syntax.Identifier);
+            writer.Write(": ");
             writeType(syntax.Type);
             writer.Write(";\n");
         }
@@ -166,6 +168,12 @@ namespace WindowsRuntimeTSDeclaration
                 writer.Write(parameter.Identifier + ": ");
                 writeType(parameter.Type);
             }
+        }
+
+        private void writeMethodAndPropertyIdentifier(SyntaxToken token)
+        {
+            var identifier = token.ToString();
+            writer.Write(Char.ToLowerInvariant(identifier[0]) + identifier.Substring(1));
         }
 
         private void writeType(TypeSyntax syntax)
