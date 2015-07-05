@@ -37,6 +37,10 @@ namespace WindowsRuntimeTSDeclaration
             {
                 procClassDeclarationSyntax((ClassDeclarationSyntax)syntax, indentCount);
             }
+            else if (syntax is PropertyDeclarationSyntax)
+            {
+                procPropertyDeclarationSyntax(syntax as PropertyDeclarationSyntax, indentCount);
+            }
             else
             {
                 throw new Exception("Unknown type : " + syntax.GetType());
@@ -89,8 +93,34 @@ namespace WindowsRuntimeTSDeclaration
             }
             writer.Write(" {\n");
 
+            foreach (var memberDecl in syntax.Members)
+            {
+                procMemberDeclarationSyntax(memberDecl, writer, indentCount + 1);
+            }
+
             writeIndents(indentCount);
             writer.Write("}\n");
+        }
+
+        private void procPropertyDeclarationSyntax(PropertyDeclarationSyntax syntax, int indentCount)
+        {
+            writeIndents(indentCount);
+            writer.Write(syntax.Identifier + ": ");
+            writeType(syntax.Type);
+            writer.Write(";\n");
+        }
+
+        private void writeType(TypeSyntax syntax)
+        {
+            if (syntax is IdentifierNameSyntax)
+            {
+                IdentifierNameSyntax i = (IdentifierNameSyntax)syntax;
+                writer.Write(i.Identifier);
+            }
+            else
+            {
+                throw new Exception("Unknown type : " + syntax.GetType());
+            }
         }
 
         private void writeIndents(int indentCount)

@@ -54,6 +54,13 @@ namespace WindowsRuntimeTSDeclaration.Test
             Assert.AreEqual("class HelloWorld implements IParent1, Qualified.Type.IParent2, Qualified.Type.IParent3<string> {\n}\n", generated);
         }
 
+        [TestMethod]
+        public void generatePropertyDeclaration()
+        {
+            var generated = generateDeclaration("class Test { Test2 name { get; }; }");
+            Assert.AreEqual("class Test {\n    name: Test2;\n}\n", generated);
+        }
+
         private string generateDeclaration(string csStr)
         {
             var writer = new StringWriter();
