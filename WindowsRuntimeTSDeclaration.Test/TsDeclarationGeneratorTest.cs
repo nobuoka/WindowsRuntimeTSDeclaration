@@ -29,6 +29,13 @@ namespace WindowsRuntimeTSDeclaration.Test
         }
 
         [TestMethod]
+        public void GenerateEnumDeclaration()
+        {
+            var generated = generateDeclaration("enum TestEnum { Val1, Val2 }");
+            Assert.AreEqual("enum TestEnum {\n    val1,\n    val2\n}\n", generated);
+        }
+
+        [TestMethod]
         public void generateOnlyEmptyClassDeclaration()
         {
             var generated = generateDeclaration("class HelloWorld {}");

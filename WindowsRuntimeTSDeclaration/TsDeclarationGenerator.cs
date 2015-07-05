@@ -33,6 +33,14 @@ namespace WindowsRuntimeTSDeclaration
             {
                 procNamespaceDeclarationSyntax((NamespaceDeclarationSyntax)syntax, indentCount);
             }
+            else if (syntax is EnumDeclarationSyntax)
+            {
+                ProcEnumDeclarationSyntax(syntax as EnumDeclarationSyntax, indentCount);
+            }
+            else if (syntax is EnumMemberDeclarationSyntax)
+            {
+                ProcEnumMemberDeclarationSyntax(syntax as EnumMemberDeclarationSyntax, indentCount);
+            }
             else if (syntax is ClassDeclarationSyntax)
             {
                 procClassDeclarationSyntax((ClassDeclarationSyntax)syntax, indentCount);
@@ -65,6 +73,39 @@ namespace WindowsRuntimeTSDeclaration
                 procMemberDeclarationSyntax(memberDecl, writer, indentCount + 1);
             }
             writer.Write("}\n");
+        }
+
+        private void ProcEnumDeclarationSyntax(EnumDeclarationSyntax syntax, int indentCount)
+        {
+            writeIndents(indentCount);
+            writer.Write("enum ");
+            writer.Write(syntax.Identifier);
+            writer.Write(" {");
+
+            bool isFirst = true;
+            foreach (var memberDecl in syntax.Members)
+            {
+                if (isFirst)
+                {
+                    isFirst = false;
+                    writer.Write("\n");
+                }
+                else
+                {
+                    writer.Write(",\n");
+                }
+                ProcEnumMemberDeclarationSyntax(memberDecl, indentCount + 1);
+            }
+            writer.Write("\n");
+
+            writeIndents(indentCount);
+            writer.Write("}\n");
+        }
+
+        private void ProcEnumMemberDeclarationSyntax(EnumMemberDeclarationSyntax syntax, int indentCount)
+        {
+            writeIndents(indentCount);
+            writeMethodAndPropertyIdentifier(syntax.Identifier);
         }
 
         private void procClassDeclarationSyntax(ClassDeclarationSyntax syntax, int indentCount)
