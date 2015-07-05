@@ -31,11 +31,11 @@ namespace WindowsRuntimeTSDeclaration
         {
             if (syntax is NamespaceDeclarationSyntax)
             {
-                procNamespaceDeclarationSyntax((NamespaceDeclarationSyntax)syntax);
+                procNamespaceDeclarationSyntax((NamespaceDeclarationSyntax)syntax, indentCount);
             }
             else if (syntax is ClassDeclarationSyntax)
             {
-                procClassDeclarationSyntax((ClassDeclarationSyntax)syntax);
+                procClassDeclarationSyntax((ClassDeclarationSyntax)syntax, indentCount);
             }
             else
             {
@@ -43,18 +43,19 @@ namespace WindowsRuntimeTSDeclaration
             }
         }
 
-        private void procNamespaceDeclarationSyntax(NamespaceDeclarationSyntax syntax)
+        private void procNamespaceDeclarationSyntax(NamespaceDeclarationSyntax syntax, int indentCount)
         {
             writer.Write("module " + syntax.Name + " {\n");
             foreach (var memberDecl in syntax.Members)
             {
-                procMemberDeclarationSyntax(memberDecl, writer, 0);
+                procMemberDeclarationSyntax(memberDecl, writer, indentCount + 1);
             }
             writer.Write("}\n");
         }
 
-        private void procClassDeclarationSyntax(ClassDeclarationSyntax syntax)
+        private void procClassDeclarationSyntax(ClassDeclarationSyntax syntax, int indentCount)
         {
+            writeIndents(indentCount);
             writer.Write("class " + syntax.Identifier);
             if (syntax.BaseList != null)
             {
@@ -87,7 +88,14 @@ namespace WindowsRuntimeTSDeclaration
                 }
             }
             writer.Write(" {\n");
+
+            writeIndents(indentCount);
             writer.Write("}\n");
+        }
+
+        private void writeIndents(int indentCount)
+        {
+            for (int i = 0; i < indentCount; i++) writer.Write("    ");
         }
 
         private bool checkBaseTypeIsInterface(BaseTypeSyntax syntax)

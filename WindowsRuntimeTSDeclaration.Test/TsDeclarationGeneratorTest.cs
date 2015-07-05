@@ -25,7 +25,7 @@ namespace WindowsRuntimeTSDeclaration.Test
         public void generateNamespaceDeclarationWithMembers()
         {
             var generated = generateDeclaration("namespace HelloWorld.Qualified.Name { class Test {} }");
-            Assert.AreEqual("module HelloWorld.Qualified.Name {\nclass Test {\n}\n}\n", generated);
+            Assert.AreEqual("module HelloWorld.Qualified.Name {\n    class Test {\n    }\n}\n", generated);
         }
 
         [TestMethod]
