@@ -127,13 +127,32 @@ namespace WindowsRuntimeTSDeclaration
 
         private void procMethodDeclarationSyntax(MethodDeclarationSyntax syntax, int indentCount)
         {
+            ParameterSyntax outParam = RemoveOutParameter(syntax, out syntax);
+
             writeIndents(indentCount);
             writeMethodAndPropertyIdentifier(syntax.Identifier);
             writer.Write("(");
             if (syntax.ParameterList != null)
                 procParameterList(syntax.ParameterList);
             writer.Write("): ");
-            writeType(syntax.ReturnType);
+            if (outParam != null)
+            {
+                if ("bool".Equals(syntax.ReturnType.ToString()))
+                {
+                    writer.Write("{ ");
+                    writer.Write(outParam.Identifier);
+                    writer.Write(": ");
+                    writeType(outParam.Type);
+                    writer.Write(", suceeded: boolean; }");
+                }
+                else
+                {
+                    throw new Exception("Unknown return pattern");
+                }
+            } else
+            {
+                writeType(syntax.ReturnType);
+            }
             writer.Write(";\n");
         }
 
@@ -146,6 +165,27 @@ namespace WindowsRuntimeTSDeclaration
             writer.Write(";\n");
         }
 
+        private ParameterSyntax RemoveOutParameter(MethodDeclarationSyntax syntax, out MethodDeclarationSyntax convertedSyntax)
+        {
+            var list = syntax.ParameterList;
+            ParameterSyntax outParam = null;
+            foreach (var parameter in list.Parameters)
+            {
+                if (parameter.Modifiers.Count > 0)
+                {
+                    foreach (var mod in parameter.Modifiers)
+                    {
+                        if (mod.ToString().Equals("out"))
+                        {
+                            outParam = parameter;
+                        }
+                    }
+                }
+            }
+            convertedSyntax = syntax.WithParameterList(list.WithParameters(list.Parameters.Remove(outParam)));
+            return outParam;
+        }
+
         private void procParameterList(ParameterListSyntax syntax)
         {
             bool isFirst = true;
@@ -155,7 +195,6 @@ namespace WindowsRuntimeTSDeclaration
                     isFirst = false;
                 else
                     writer.Write(", ");
-                // TODO: handle out modifier
                 if (parameter.Modifiers.Count > 0)
                 {
                     writer.Write("/*");

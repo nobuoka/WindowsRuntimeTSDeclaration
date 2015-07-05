@@ -72,10 +72,13 @@ namespace WindowsRuntimeTSDeclaration.Test
 
             generated = generateDeclaration("class Test { Qualified.Test2<Test3<uint>> Proc(string name, Test2 test2); }");
             Assert.AreEqual("class Test {\n    proc(name: string, test2: Test2): Qualified.Test2<Test3<number /* uint */>>;\n}\n", generated);
+        }
 
-            // TODO: `out` modifier
-            generated = generateDeclaration("class Test { bool TryGetName(out string name); }");
-            Assert.AreEqual("class Test {\n    tryGetName(/*[out]*/ name: string): boolean;\n}\n", generated);
+        [TestMethod]
+        public void generateTryXxxMethodDeclaration()
+        {
+            var generated = generateDeclaration("class Test { bool TryGetName(out string name); }");
+            Assert.AreEqual("class Test {\n    tryGetName(): { name: string, suceeded: boolean; };\n}\n", generated);
         }
 
         [TestMethod]
