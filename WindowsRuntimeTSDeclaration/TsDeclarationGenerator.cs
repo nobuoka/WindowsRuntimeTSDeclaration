@@ -49,7 +49,9 @@ namespace WindowsRuntimeTSDeclaration
 
         private void procNamespaceDeclarationSyntax(NamespaceDeclarationSyntax syntax, int indentCount)
         {
-            writer.Write("module " + syntax.Name + " {\n");
+            writer.Write("module ");
+            writeType(syntax.Name);
+            writer.Write(" {\n");
             foreach (var memberDecl in syntax.Members)
             {
                 procMemberDeclarationSyntax(memberDecl, writer, indentCount + 1);
@@ -72,10 +74,14 @@ namespace WindowsRuntimeTSDeclaration
                     else
                         baseClasses.Add(t);
                 }
-                if (baseClasses.Count > 0)
+                if (baseClasses.Count == 1)
                 {
                     writer.Write(" extends ");
-                    writer.Write(baseClasses[0].Type);
+                    writeType(baseClasses[0].Type);
+                }
+                else if (baseClasses.Count > 1)
+                {
+                    throw new Exception("Number of base classes is greater than one.");
                 }
                 if (baseInterfaces.Count > 0)
                 {
@@ -87,7 +93,7 @@ namespace WindowsRuntimeTSDeclaration
                             isFirst = false;
                         else
                             writer.Write(", ");
-                        writer.Write(b.Type);
+                        writeType(b.Type);
                     }
                 }
             }
