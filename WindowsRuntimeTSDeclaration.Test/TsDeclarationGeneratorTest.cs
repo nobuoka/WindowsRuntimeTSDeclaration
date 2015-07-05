@@ -57,8 +57,17 @@ namespace WindowsRuntimeTSDeclaration.Test
         [TestMethod]
         public void generatePropertyDeclaration()
         {
-            var generated = generateDeclaration("class Test { Test2 name { get; }; }");
+            var generated = generateDeclaration("class Test { string name { get; } }");
+            Assert.AreEqual("class Test {\n    name: string;\n}\n", generated);
+
+            generated = generateDeclaration("class Test { Test2 name { get; } }");
             Assert.AreEqual("class Test {\n    name: Test2;\n}\n", generated);
+
+            generated = generateDeclaration("class Test { Test2<Test3<uint, Test4>> name { get; } }");
+            Assert.AreEqual("class Test {\n    name: Test2<Test3<number /* uint */, Test4>>;\n}\n", generated);
+
+            generated = generateDeclaration("class Test { Qualified.Test2<Test3> name { get; } }");
+            Assert.AreEqual("class Test {\n    name: Qualified.Test2<Test3>;\n}\n", generated);
         }
 
         [TestMethod]

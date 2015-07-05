@@ -132,6 +132,29 @@ namespace WindowsRuntimeTSDeclaration
                 IdentifierNameSyntax i = (IdentifierNameSyntax)syntax;
                 writer.Write(i.Identifier);
             }
+            else if (syntax is GenericNameSyntax)
+            {
+                GenericNameSyntax g = syntax as GenericNameSyntax;
+                writer.Write(g.Identifier);
+                writer.Write("<");
+                bool isFirst = true;
+                foreach (var arg in g.TypeArgumentList.Arguments)
+                {
+                    if (isFirst)
+                        isFirst = false;
+                    else
+                        writer.Write(", ");
+                    writeType(arg);
+                }
+                writer.Write(">");
+            }
+            else if (syntax is QualifiedNameSyntax)
+            {
+                QualifiedNameSyntax q = (QualifiedNameSyntax)syntax;
+                writeType(q.Left);
+                writer.Write(".");
+                writeType(q.Right);
+            }
             else
             {
                 throw new Exception("Unknown type : " + syntax.GetType());
