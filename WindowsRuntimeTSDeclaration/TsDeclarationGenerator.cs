@@ -23,11 +23,11 @@ namespace WindowsRuntimeTSDeclaration
             var root = (CompilationUnitSyntax)tree.GetRoot();
             foreach (var memberDecl in root.Members)
             {
-                procMemberDeclarationSyntax(memberDecl, Console.Out, 0);
+                procMemberDeclarationSyntax(memberDecl, 0);
             }
         }
 
-        private void procMemberDeclarationSyntax(MemberDeclarationSyntax syntax, TextWriter writer, int indentCount)
+        private void procMemberDeclarationSyntax(MemberDeclarationSyntax syntax, int indentCount)
         {
             if (syntax is NamespaceDeclarationSyntax)
             {
@@ -78,7 +78,7 @@ namespace WindowsRuntimeTSDeclaration
             writer.Write(" {\n");
             foreach (var memberDecl in syntax.Members)
             {
-                procMemberDeclarationSyntax(memberDecl, writer, indentCount + 1);
+                procMemberDeclarationSyntax(memberDecl, indentCount + 1);
             }
             writer.Write("}\n");
         }
@@ -130,7 +130,7 @@ namespace WindowsRuntimeTSDeclaration
 
             foreach (var m in syntax.Members)
             {
-                procMemberDeclarationSyntax(m, null, indentCount + 1);
+                procMemberDeclarationSyntax(m, indentCount + 1);
             }
 
             writeIndents(indentCount);
@@ -179,7 +179,7 @@ namespace WindowsRuntimeTSDeclaration
 
             foreach (var memberDecl in syntax.Members)
             {
-                procMemberDeclarationSyntax(memberDecl, writer, indentCount + 1);
+                procMemberDeclarationSyntax(memberDecl, indentCount + 1);
             }
 
             writeIndents(indentCount);
