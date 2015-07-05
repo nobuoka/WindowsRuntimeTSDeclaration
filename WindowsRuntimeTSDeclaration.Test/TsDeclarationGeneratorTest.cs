@@ -43,6 +43,19 @@ namespace WindowsRuntimeTSDeclaration.Test
         }
 
         [TestMethod]
+        public void GenerateInterfaceDeclaration()
+        {
+            var generated = generateDeclaration("interface HelloWorld : ParentWorld {}");
+            Assert.AreEqual("interface HelloWorld extends ParentWorld {\n}\n", generated);
+
+            generated = generateDeclaration("interface HelloWorld : IParent1, Qualified.Type.IParent2, Qualified.Type.IParent3<string> {}");
+            Assert.AreEqual("interface HelloWorld extends IParent1, Qualified.Type.IParent2, Qualified.Type.IParent3<string> {\n}\n", generated);
+
+            generated = generateDeclaration("interface HelloWorld { string Name; }");
+            Assert.AreEqual("interface HelloWorld {\n    name: string;\n}\n", generated);
+        }
+
+        [TestMethod]
         public void generateOnlyEmptyClassDeclaration()
         {
             var generated = generateDeclaration("class HelloWorld {}");

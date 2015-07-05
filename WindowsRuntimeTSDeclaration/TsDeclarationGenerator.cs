@@ -45,6 +45,10 @@ namespace WindowsRuntimeTSDeclaration
             {
                 ProcStructDeclarationSyntax(syntax as StructDeclarationSyntax, indentCount);
             }
+            else if (syntax is InterfaceDeclarationSyntax)
+            {
+                ProcInterfaceDeclarationSyntax(syntax as InterfaceDeclarationSyntax, indentCount);
+            }
             else if (syntax is ClassDeclarationSyntax)
             {
                 procClassDeclarationSyntax((ClassDeclarationSyntax)syntax, indentCount);
@@ -131,6 +135,34 @@ namespace WindowsRuntimeTSDeclaration
             foreach (var m in syntax.Members)
             {
                 procMemberDeclarationSyntax(m, indentCount + 1);
+            }
+
+            writeIndents(indentCount);
+            writer.Write("}\n");
+        }
+
+        private void ProcInterfaceDeclarationSyntax(InterfaceDeclarationSyntax syntax, int indentCount)
+        {
+            writeIndents(indentCount);
+            writer.Write("interface " + syntax.Identifier);
+            if (syntax.BaseList != null)
+            {
+                writer.Write(" extends ");
+                bool isFirst = true;
+                foreach (var t in syntax.BaseList.Types)
+                {
+                    if (isFirst)
+                        isFirst = false;
+                    else
+                        writer.Write(", ");
+                    writeType(t.Type);
+                }
+            }
+            writer.Write(" {\n");
+
+            foreach (var memberDecl in syntax.Members)
+            {
+                procMemberDeclarationSyntax(memberDecl, indentCount + 1);
             }
 
             writeIndents(indentCount);
