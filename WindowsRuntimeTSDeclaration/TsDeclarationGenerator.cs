@@ -104,17 +104,27 @@ namespace WindowsRuntimeTSDeclaration
             if (syntax is IdentifierNameSyntax)
             {
                 var i = syntax as IdentifierNameSyntax;
-                return i.Identifier.ToString().StartsWith("I");
+                return checkIdentifierIsInterface(i.Identifier);
             }
             else if (syntax is QualifiedNameSyntax)
             {
                 var q = syntax as QualifiedNameSyntax;
                 return checkTypeIsInterface(q.Right);
             }
+            else if (syntax is GenericNameSyntax)
+            {
+                var g = syntax as GenericNameSyntax;
+                return checkIdentifierIsInterface(g.Identifier);
+            }
             else
             {
                 throw new Exception("Unknown type : " + syntax.GetType());
             }
+        }
+
+        private bool checkIdentifierIsInterface(SyntaxToken token)
+        {
+            return token.ToString().StartsWith("I");
         }
     }
 }

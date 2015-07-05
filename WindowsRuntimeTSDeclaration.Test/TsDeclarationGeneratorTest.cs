@@ -37,11 +37,14 @@ namespace WindowsRuntimeTSDeclaration.Test
             generated = generateDeclaration("class HelloWorld : Qualified.Type.ParentWorld {}");
             Assert.AreEqual("class HelloWorld extends Qualified.Type.ParentWorld {\n}\n", generated);
 
+            generated = generateDeclaration("class HelloWorld : Qualified.Type.ParentWorld<string> {}");
+            Assert.AreEqual("class HelloWorld extends Qualified.Type.ParentWorld<string> {\n}\n", generated);
+
             generated = generateDeclaration("class HelloWorld : ParentWorld, IParentInterface {}");
             Assert.AreEqual("class HelloWorld extends ParentWorld implements IParentInterface {\n}\n", generated);
 
-            generated = generateDeclaration("class HelloWorld : IParent1, Qualified.Type.IParent2, IParent3 {}");
-            Assert.AreEqual("class HelloWorld implements IParent1, Qualified.Type.IParent2, IParent3 {\n}\n", generated);
+            generated = generateDeclaration("class HelloWorld : IParent1, Qualified.Type.IParent2, Qualified.Type.IParent3<string> {}");
+            Assert.AreEqual("class HelloWorld implements IParent1, Qualified.Type.IParent2, Qualified.Type.IParent3<string> {\n}\n", generated);
         }
 
         private string generateDeclaration(string csStr)
