@@ -32,6 +32,10 @@ namespace WindowsRuntimeTSDeclaration
             {
                 procNamespaceDeclarationSyntax((NamespaceDeclarationSyntax)syntax);
             }
+            else
+            {
+                throw new Exception("Unknown type : " + syntax.GetType());
+            }
         }
 
         private void procNamespaceDeclarationSyntax(NamespaceDeclarationSyntax syntax)
